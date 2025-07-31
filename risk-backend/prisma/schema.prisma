@@ -1,0 +1,153 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  role          Role
+  createdAt     DateTime @default(now()) @map("created_at")
+  submissions   Submission[]
+
+  @@map("users")
+}
+
+model Submission {
+  id             String             @id @default(uuid())
+  submittedBy    String
+  type           SubmissionType
+  status         SubmissionStatus  @default(pending)
+  calculatedScore Float?
+  systemRating   RiskBand
+  finalRating    RiskBand
+  justification  String?
+  submittedAt    DateTime           @default(now())
+
+  user           User   @relation(fields: [submittedBy], references: [id])
+  details        SubmissionDetail[]
+}
+
+model SubmissionDetail {
+  id           String   @id @default(uuid())
+  submissionId String
+  section      String
+  data         Json
+
+  submission   Submission @relation(fields: [submissionId], references: [id])
+}
+
+model RiskParameter {
+  id          Int      @id @default(autoincrement())
+  category    String
+  parameter   String
+  riskLevel   RiskBand
+  scoreValue  Float
+}
+
+model AdminSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  description String
+  value       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Add these new models to your existing schema.prisma
+
+model CountryRisk {
+  id        Int      @id @default(autoincrement())
+  country   String   @unique
+  riskLevel RiskBand
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("country_risks")
+}
+
+model EmploymentRisk {
+  id         Int      @id @default(autoincrement())
+  occupation String   @unique
+  riskLevel  RiskBand
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  @@map("employment_risks")
+}
+
+model ProductRisk {
+  id        Int      @id @default(autoincrement())
+  product   String   @unique
+  riskLevel RiskBand
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("product_risks")
+}
+
+model BusinessNatureRisk {
+  id        Int      @id @default(autoincrement())
+  business  String   @unique
+  riskLevel RiskBand
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("business_nature_risks")
+}
+
+// Also add these special lists
+model SanctionList {
+  id        Int      @id @default(autoincrement())
+  name      String
+  listType  String   // "blacklist" or "negative"
+  country   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("sanction_lists")
+}
+
+
+model ScoringConfig {
+  name        String   @id
+  value       Float
+  description String?
+}
+
+enum Role {
+  user
+  approver
+  admin
+}
+
+enum SubmissionType {
+  individual
+  entity
+}
+
+enum SubmissionStatus {
+  pending
+  approved
+  rejected
+  escalated
+}
+
+enum RiskBand {
+  Low
+  Medium
+  High
+  AutoHigh
+  NoGo
+}

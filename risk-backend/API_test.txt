@@ -1,0 +1,117 @@
+{"email":"test@example.com","password":"password123","role":"user"}
+
+{
+    "message": "User created",
+    "user": {
+        "id": "db9b80ec-a970-4f27-8a6c-7c2d376a2a7e",
+        "email": "test@example.com",
+        "passwordHash": "$2b$10$pvImXq4efdjh6zS891lDO.tThS9mKVCzkM5RJuyo7VZwh1VuVRtcq",
+        "role": "user",
+        "createdAt": "2025-07-29T09:29:08.467Z"
+    }
+}
+
+
+http://localhost:3000/auth/login
+{
+    "email": "test@example.com",
+    "password": "password123"
+  }
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRiOWI4MGVjLWE5NzAtNGYyNy04YTZjLTdjMmQzNzZhMmE3ZSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzUzNzgyMjQ0LCJleHAiOjE3NTM4Njg2NDR9.0bxpJ8Poi4qDCZmEloS5aDvvGf8VEMflnaFpuFBDA38",
+    "user": {
+        "email": "test@example.com",
+        "role": "user"
+    }
+}
+
+
+http://localhost:3000/submissions
+{
+    "id": "fb0eeeb5-7d76-4916-a93c-3d11dd7361a7",
+    "submittedBy": "db9b80ec-a970-4f27-8a6c-7c2d376a2a7e",
+    "type": "individual",
+    "status": "pending",
+    "calculatedScore": 0,
+    "systemRating": "Low",
+    "finalRating": "Low",
+    "justification": null,
+    "submittedAt": "2025-07-29T09:45:24.794Z",
+    "details": [
+        {
+            "id": "241885f7-6be9-474b-9152-e4ca4a78e606",
+            "submissionId": "fb0eeeb5-7d76-4916-a93c-3d11dd7361a7",
+            "section": "personal_info",
+            "data": {
+                "isPEP": false,
+                "country": "Nigeria",
+                "annualTurnover": 50000
+            }
+        },
+        {
+            "id": "a8503bae-ea47-4afb-8984-901919ba7c65",
+            "submissionId": "fb0eeeb5-7d76-4916-a93c-3d11dd7361a7",
+            "section": "source_of_wealth",
+            "data": {
+                "source": "Salary",
+                "documentsProvided": true
+            }
+        }
+    ]
+}
+
+
+______________________________
+
+Get Submission
+
+curl -X GET http://localhost:3000/submissions/SUBMISSION_ID_HERE \
+  -H "Authorization: Bearer TOKEN_HERE"
+
+[
+    {
+        "id": "fb0eeeb5-7d76-4916-a93c-3d11dd7361a7",
+        "submittedBy": "db9b80ec-a970-4f27-8a6c-7c2d376a2a7e",
+        "type": "individual",
+        "status": "pending",
+        "calculatedScore": 0,
+        "systemRating": "Low",
+        "finalRating": "Low",
+        "justification": null,
+        "submittedAt": "2025-07-29T09:45:24.794Z",
+        "details": [
+            {
+                "id": "241885f7-6be9-474b-9152-e4ca4a78e606",
+                "submissionId": "fb0eeeb5-7d76-4916-a93c-3d11dd7361a7",
+                "section": "personal_info",
+                "data": {
+                    "isPEP": false,
+                    "country": "Nigeria",
+                    "annualTurnover": 50000
+                }
+            },
+            {
+                "id": "a8503bae-ea47-4afb-8984-901919ba7c65",
+                "submissionId": "fb0eeeb5-7d76-4916-a93c-3d11dd7361a7",
+                "section": "source_of_wealth",
+                "data": {
+                    "source": "Salary",
+                    "documentsProvided": true
+                }
+            }
+        ]
+    }
+]
+
+________________________________________________________________________________
+
+
+Patch : curl -X PATCH http://localhost:3000/submissions/4f99dbe1-442b-4a5b-9e1b-763c79f948db/override \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "finalRating": "Medium",
+    "justification": "Customer has reliable income history"
+  }'
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
