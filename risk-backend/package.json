@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev src/index.ts",
     "build": "tsc",
-    "start": "npx ts-node src/index.ts",
+    "start": "npx prisma generate && npx prisma db push && npx ts-node src/index.ts",
     "docs": "echo 'Swagger docs available at http://localhost:3000/api-docs'",
     "postinstall": "npx prisma generate"
   },
