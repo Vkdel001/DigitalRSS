@@ -1,9 +1,8 @@
-
 [build]
 command = "npm install"
 
 [deploy]
-startCommand = "npx prisma generate && npx prisma db push --accept-data-loss && npx ts-node src/index.ts"
+startCommand = "npx prisma generate && npx prisma db push && npx ts-node src/scripts/seed.ts && npx ts-node src/index.ts"
 
 [env]
 NODE_ENV = "production"
