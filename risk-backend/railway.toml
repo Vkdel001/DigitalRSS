@@ -1,8 +1,8 @@
 [build]
-command = "npm install && npx prisma generate"
+command = "npm install"
 
 [deploy]
-startCommand = "npx ts-node src/index.ts"
+startCommand = "npx prisma generate && npx prisma db push && npx ts-node src/index.ts"
 
 [env]
 NODE_ENV = "production"
