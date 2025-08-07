@@ -1,8 +1,9 @@
 [build]
-command = "npm install"
+command = "npm install" # Updated for master branch
 
 [deploy]
 startCommand = "npx prisma generate && npx prisma db push && npx ts-node src/scripts/seed.ts && npx ts-node src/index.ts"
 
 [env]
+
 NODE_ENV = "production"
